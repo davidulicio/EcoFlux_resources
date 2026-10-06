@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.shortcuts import resolve_url
 from django.utils.http import url_has_allowed_host_and_scheme
 
 
@@ -23,7 +23,8 @@ def get_return_url(request, fallback_viewname="home"):
         ):
             return candidate
 
-    return reverse(fallback_viewname)
+    # Views may supply either a route name or an already reversed/lazy URL.
+    return resolve_url(fallback_viewname)
 
 
 """

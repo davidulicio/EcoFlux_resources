@@ -635,18 +635,7 @@ class SiteUpdateView(LoginRequiredMixin, SiteViewsMixin, UpdateView):
         return context
 
     def form_valid(self, form):
-        # NB equipment has already been deleted before we arrive here.
-        # document.delete deletes all associated files.
-        for document in self.object.documents.all():
-            document.delete()
-        # fieldnotes have nested objects to deletemodalblocked
-        for fieldnote in self.object.fieldnotes.all():
-            for photo in fieldnote.photos.all():
-                photo.delete()
-            for doc in fieldnote.documents.all():
-                doc.delete()
-            fieldnote.delete()
-
+        # Ordinary site edits preserve related records and their stored files.
         response = super().form_valid(form)
         # Store message before redirect
         logger.info(
