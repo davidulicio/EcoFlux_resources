@@ -6,7 +6,7 @@
 {% block extra_css %}
 {% endblock %}
 
-{% block page_heading %} - {{action}} Document{% endblock %}
+{% block page_heading %}{{action}} Document{% endblock %}
 
 {% block content %}
 
@@ -15,8 +15,6 @@
 
   {% csrf_token %}
   {% crispy form %}
-
-  <input type="hidden" name="next" value="{{ request.GET.next|default:'' }}">
 
   <div class="mb-3 text-center">
     {% if document.file %}

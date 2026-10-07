@@ -1,0 +1,64 @@
+/* CSS to combine stacked accordion headers into a single row */
+/* From Claude */
+
+.accordion-horizontal {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(var(--accordion-columns, 1), 1fr); /* 1 = safest universal fallback */
+}
+
+.accordion-horizontal .accordion-item {
+    display: contents; /* header/body become direct grid children */
+}
+
+.accordion-horizontal .accordion-header {
+    grid-row: 1;
+}
+
+/* open the related data starting on the row after the accordion header */
+/*   and span all the columns in that row (from 1 to the end) */
+.accordion-horizontal .accordion-collapse {
+    grid-row: 2;
+    grid-column: 1 / -1; /* body spans full width regardless of which header opened it */
+}
+
+/* Optional: make headers look more like tabs than accordion bars */
+.accordion-horizontal .accordion-button {
+    border-radius: 0;
+    box-shadow: none;
+    border-left: 3px solid black; /*var(--bs-border-color);*/
+}
+
+.accordion-horizontal .accordion-item:first-child .accordion-button {
+    border-left: none; /* no divider before the very first header */
+}
+
+.accordion-horizontal .accordion-button.collapsed::after {
+    /* Bootstrap's default caret icon is dark; on a colored background you may want a white version */
+    filter: brightness(0) invert(1);
+}
+
+/* Set colours for accordion buttons:
+/* closed state */
+.accordion-horizontal .accordion-button.collapsed {
+    background-color: var(--bs-primary);
+    color: #fff; /* match text-bg-info's contrast choice, or pick your own */
+}
+
+/* open state */
+.accordion-horizontal .accordion-button:not(.collapsed) {
+    background-color: var(--bs-success-bg-subtle);
+    color: #000;
+}
+/* Hide add-button when the accordion button is collapsed (closed) */
+.accordion-horizontal .accordion-header .accordion-button.collapsed ~ .add-button {
+  display: none !important; /* to override !important display setting in d-flex css */
+}
+
+/* .accordion-horizontal .accordion-header .accorion-button.not(collapsed) ~ .add-button { */
+/*     background-color: var(--bs-primary); */
+/* } */
+
+/* .accordion-horizontal .accordion-button::after { */
+/*   display: none; /\* remove the down-caret if you don't want it in a horizontal layout *\/ */
+/* } */

@@ -91,7 +91,7 @@ class BaseContextMixin:
                 ],
             )
             context["default_success_url"] = self.default_success_url
-        # Set this for all views, override in SiteUnpdateView if needed.
+        # Set this for all views, override in xxxxUpdateView if needed.
         context["blocked"] = False
         context["git_version"] = settings.GIT_VERSION
 
@@ -269,15 +269,21 @@ class EquipmentUpdateView(LoginRequiredMixin, EquipmentViewsMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         equipment = context["object"]
 
+        # Associated items
+        # Set this to the number of associated items
+        context["accordion_columns"] = 2
+        # History records
         context["history_records"] = equipment.history.order_by("date")
         context["history_add_url"] = reverse(
             "history_add", kwargs={"equipment_pk": equipment.pk}
         )
+        # Documents
         context["documents"] = equipment.documents
         doc_count = equipment.documents.count()
         context["document_create_url"] = (
             reverse("document_add") + f"?equipment_pk={equipment.pk}"
         )
+        # Deletion confirmation info
         context["record_type"] = "Equipment"
         context["content_type"] = "piece of equipment"
         context["cascade_json"] = (
@@ -388,14 +394,20 @@ class FieldNoteUpdateView(LoginRequiredMixin, FieldNoteViewsMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         fieldnote = context["object"]
 
+        # Associated items
+        # Set this to the number of associated items
+        context["accordion_columns"] = 2
+        # Photos
         context["photos"] = fieldnote.photos.all()
         context["photo_add_url"] = reverse("photo_add", args=[context["object"].id])
         photo_count = fieldnote.photos.count()
+        # Documents
         context["documents"] = fieldnote.documents.all()
         doc_count = fieldnote.documents.count()
         context["document_create_url"] = (
             reverse("document_add") + f"?fieldnote_pk={fieldnote.pk}"
         )
+        # Deletion confirmation info
         context["record_type"] = "Fiednote"
         context["content_type"] = "fieldnote"
         context["cascade_json"] = (
@@ -424,7 +436,7 @@ class FieldNoteDeleteView(
     model = FieldNote
     default_success_url = reverse_lazy("view_fieldnotes")
     success_message = (
-        "Field note of %(date)s for site %(site)s was deleted successfully!"
+        "Fieldnote of %(date)s for site %(site)s was deleted successfully!"
     )
 
     def form_valid(self, form):
@@ -570,6 +582,9 @@ class SiteUpdateView(LoginRequiredMixin, SiteViewsMixin, UpdateView):
         site = context["object"]
         context["record_type"] = "Site"
 
+        # Associated items
+        # Set this to the number of associated items
+        context["accordion_columns"] = 4
         # DOI
         context["doi_records"] = site.doi_records.all()
         context["doi_add_url"] = reverse("doi_add", kwargs={"site_pk": site.pk})
@@ -596,6 +611,7 @@ class SiteUpdateView(LoginRequiredMixin, SiteViewsMixin, UpdateView):
         context["document_create_url"] = reverse("document_add") + f"?site_pk={site.pk}"
         context["documents"] = site.documents.all()
         doc_count = len(context["documents"])
+
         # Deletion confirmation data
         context["content_type"] = "site"
         context["delete_type"] = "blocked" if equipment_count > 0 else "cascade"
@@ -624,6 +640,7 @@ class SiteUpdateView(LoginRequiredMixin, SiteViewsMixin, UpdateView):
                     label += f" (including {' and '.join(extras)})"
                 cascade.append({"count": fieldnote_count, "label": label})
             if doc_count:
+
                 cascade.append(
                     {
                         "count": doc_count,
@@ -1041,7 +1058,7 @@ class SiteListView(LoginRequiredMixin, SortedListMixin):
         context["sort"] = self._sort_key
         context["filter_fields"] = self.filter_fields
         context["table_fields"] = self.table_fields
-        context["add_button"] = "Add New Site"
+        context["add_button"] = "Add Site"
         context["add_url"] = reverse("site_add")
         context["edit_url"] = "site_edit"
         # This will only be used when filtering is re-implemented.
@@ -1203,8 +1220,8 @@ class FieldNoteListView(LoginRequiredMixin, SortedListMixin):
         context["table_fields"] = self.table_fields
         context["reset_url"] = reverse("view_fieldnotes")
         context["add_url"] = reverse("fieldnote_add")
-        context["heading"] = "Field notes"
-        context["add_button"] = "Add Field note"
+        context["heading"] = "Fieldnotes"
+        context["add_button"] = "Add Fieldnote"
         context["edit_url"] = "fieldnote_edit"
         context["git_version"] = settings.GIT_VERSION
 

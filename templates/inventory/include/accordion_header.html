@@ -1,5 +1,5 @@
 <div class="accordion-header d-flex align-items-stretch flex-grow-1">
-  <button class="p-1 text-bg-info accordion-button rounded-0 collapsed flex-grow-1"
+  <button class="p-1 accordion-button rounded-0 collapsed flex-grow-1"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#{{ section_id }}Collapse"
@@ -10,17 +10,17 @@
 
   {% if button_url %}
   <a href="{{ button_url }}"
-     class="btn btn-info d-flex align-items-center rounded-0 text-nowrap">
-    <i class="bi bi-plus-circle me-1"></i>{{ button_text }}
+     class="btn btn-success add-button d-flex align-items-center rounded-0">
+    Add
   </a>
   {% endif %}
 
   {% if ajax_add_id %}
   <button type="button"
           id="{{ ajax_add_id }}"
-          class="btn btn-info d-flex align-items-center rounded-0 text-nowrap"
+          class="btn btn-success d-flex add-button align-items-center rounded-0"
           data-section-id="{{ section_id }}">
-    <i class="bi bi-plus-circle me-1"></i>{{ button_text }}
+    <i class="me-1"></i>Add
   </button>
   {% endif %}
 </div>

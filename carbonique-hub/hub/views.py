@@ -82,7 +82,15 @@ def service_worker(request):
 
 @require_GET
 def manifest(request):
-    return JsonResponse({"name": "Carbonique Hub", "short_name": "Carbonique", "start_url": "/", "scope": "/", "display": "standalone", "background_color": "#f5f7f2", "theme_color": "#1d493b", "icons": [{"src": "/static/hub/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]})
+    return JsonResponse({
+        "name": "Carbonique Hub", "short_name": "Carbonique", "start_url": "/",
+        "scope": "/", "display": "standalone", "background_color": "#f5f7f2",
+        "theme_color": "#1d493b", "icons": [
+            {"src": f"/static/hub/ecoflux-icon-{size}.png", "sizes": f"{size}x{size}",
+             "type": "image/png", "purpose": "any"}
+            for size in (192, 512)
+        ],
+    })
 
 @login_required
 def export_csv(request):

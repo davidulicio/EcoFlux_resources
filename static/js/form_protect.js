@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let isFormDirty = false;
     let isMainFormDirty = false;
     let mainFormName = null;
-    let pendingNavigationUrl = null;
     let activeFormName = null;
     let activeFormMessage = null;
     let isAjaxDirtyFn = null;
@@ -100,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (isFormDirty && !link.hasAttribute('data-bypass-protect')) {
                 e.preventDefault();
-                pendingNavigationUrl = href;
                 // Prevent beforeunload from also firing a browser dialogue
                 isFormDirty = false;
                 showModal();
@@ -130,9 +128,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!activeFormName) return;
         const formToSave = [...forms].find(f => f.getAttribute('data-form-name') === activeFormName);
         if (!formToSave) return;
-
-        const nextInput = formToSave.querySelector('input[name="next"]');
-        nextInput.value = pendingNavigationUrl;
 
         isFormDirty = false;
         isMainFormDirty = false;

@@ -1,11 +1,24 @@
 /* Only cache the neutral application shell and local assets. Never cache API replies. */
-const CACHE = "carbonique-shell-v2";
-const ASSETS = ["/static/hub/app.js", "/static/hub/storage.js", "/static/hub/style.css", "/static/hub/logo.svg", "/static/hub/icon.svg", "/manifest.webmanifest"];
+const CACHE = "carbonique-shell-v3";
+const ASSETS = ["/static/hub/app.js", "/static/hub/storage.js", "/static/hub/style.css", "/static/hub/logo.svg", "/static/hub/icon.svg", "/static/hub/ecoflux-winter.png", "/static/hub/ecoflux-icon.svg", "/static/hub/ecoflux-icon-32.png", "/static/hub/ecoflux-icon-180.png", "/static/hub/ecoflux-icon-192.png", "/static/hub/ecoflux-icon-512.png", "/manifest.webmanifest"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", event => {
-  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith("carbonique-shell-") && k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+  event.waitUntil((async () => {
+    const cache=await caches.open(CACHE);
+    const oldKeys=(await caches.keys()).filter(key=>key.startsWith("carbonique-shell-")&&key!==CACHE);
+    // Keep the already prepared neutral shell when upgrading the assets.
+    // Site records and pending operations remain in account-scoped IndexedDB.
+    if(!await cache.match("/")){
+      for(const key of oldKeys.reverse()){
+        const shell=await (await caches.open(key)).match("/");
+        if(shell){await cache.put("/",shell);break;}
+      }
+    }
+    await Promise.all(oldKeys.map(key=>caches.delete(key)));
+    await self.clients.claim();
+  })());
 });
 self.addEventListener("message", event => {
   if (event.data === "CACHE_SHELL") event.waitUntil(caches.open(CACHE).then(async cache => {

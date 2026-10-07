@@ -2,10 +2,7 @@
 {% load querystring custom_filters %}
 
 <!-- This block can go in the top banner... -->
-{% block page_heading %} - {{heading}}<a href={{ add_url }} class="btn btn-success bi bi-plus-circle"></>
-  {{add_button}}</a>
-{% endblock %}
-
+{% block page_heading %} {{ heading }} {% endblock %}
 {% block content %}
 
 <!-- ...or it can be at the top of the scrollable part of the page -->

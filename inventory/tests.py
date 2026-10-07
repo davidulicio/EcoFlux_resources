@@ -24,6 +24,50 @@ class NavigationFallbackTests(SimpleTestCase):
                 self.assertEqual(get_return_url(request, fallback), expected)
 
 
+class RelatedRecordPageTests(TestCase):
+    """Exercise the upstream detail templates, form helpers and named URLs together."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = get_user_model().objects.create_superuser(
+            username="page-reviewer", email="reviewer@example.test", password=None,
+        )
+        cls.site = Site.objects.create(
+            name="Tabbed site", code="UQAM_3", amp="CA-CQ3", location="Quebec",
+            date_activated="2025-04-10",
+        )
+        cls.equipment = Equipment.objects.create(
+            instrument="Analyzer", serial_number="tab-test",
+            date_purchased="2025-01-01", site=cls.site,
+        )
+        cls.note = FieldNote.objects.create(site=cls.site, note="Site observation")
+
+    def setUp(self):
+        self.client.force_login(self.user)
+
+    def test_site_detail_renders_all_related_sections(self):
+        response = self.client.get(reverse("site_edit", args=[self.site.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "/static/css/accordion.css")
+        for section in ("doiCollapse", "fieldnotesCollapse", "equipmentCollapse", "documentsCollapse"):
+            self.assertContains(response, section)
+        self.assertEqual(response.context["accordion_columns"], 4)
+
+    def test_equipment_detail_renders_history_and_documents(self):
+        response = self.client.get(reverse("equipment_edit", args=[self.equipment.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "historyCollapse")
+        self.assertContains(response, "documentsCollapse")
+        self.assertEqual(response.context["accordion_columns"], 2)
+
+    def test_fieldnote_detail_renders_photos_and_documents(self):
+        response = self.client.get(reverse("fieldnote_edit", args=[self.note.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "photosCollapse")
+        self.assertContains(response, "documentsCollapse")
+        self.assertEqual(response.context["accordion_columns"], 2)
+
+
 class SiteEditPreservationTests(TestCase):
     def test_edit_preserves_fieldnotes_photos_documents_and_file_bytes(self):
         with tempfile.TemporaryDirectory() as temp, override_settings(MEDIA_ROOT=temp):

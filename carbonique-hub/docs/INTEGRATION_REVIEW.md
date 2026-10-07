@@ -2,7 +2,7 @@
 
 ## Proposed behavior
 
-This contribution adds a runnable unified Carbonique Hub under `carbonique-hub/`, with one Django backend and one team interface for field operations, inventory and scientific reference records. Its public Field Notes section embeds the original supplied report, served from a replaceable HTML file without login.
+This contribution adds a runnable unified Carbonique Hub under `carbonique-hub/`, with one Django backend and one team interface for field operations, inventory and scientific reference records. Its public Field Notes section embeds the original supplied report, served from a replaceable HTML file without login. The integration now includes Hank's latest EcoFlux changes through `295f850` and their corresponding Hub adaptations.
 
 The root EcoFlux runtime remains available during evaluation. Adoption of the Hub is an explicit server deployment and data-migration step, rather than an automatic switch caused by merging the source.
 
@@ -42,10 +42,10 @@ The legacy fixes require no database migration. They can be reviewed independent
 
 ## Validation
 
-The integrated layout was checked with Python 3.12 and Django 5.2.18. The **45 Hub tests and 2 legacy regression tests pass**. Django system checks, missing-migration checks, fresh initialization and static collection pass. The legacy preservation test was observed failing against the destructive update view before the fix.
+The updated integrated layout was checked with Python 3.12 and Django 5.2.18. The **45 Hub tests and 5 legacy regression tests pass**. Django system checks, missing-migration checks, fresh initialization and static collection pass. The legacy preservation test was observed failing against the destructive update view before the fix. The new site-page rendering test also reproduced the upstream missing-static-import error before its fix.
 
 The Hub's earlier browser checks verified anonymous report rendering, field workflows, offline reload/reconnection, forms, account roles and mobile layout. Its earlier portable backup/restore check verified matching attachment bytes. Those checks concern this implementation, not an unseen live deployment.
 
-The contribution patch was applied and tested against a fresh checkout of upstream `main` at `664dc23ffcaef148b1a66e03d1cc627a7ca810a8`. Applying file attributes first was also checked with Windows-style Git conversion (`core.autocrlf=true`): the resulting Git index matches the prepared source and the original public HTML retains identical bytes. Source assets include all 15 seed photographs/plots. Fresh initialization under an ASCII default file encoding preserves the Unicode reference metadata and verifies all 30 imported attachment hashes. CI is defined but its GitHub-hosted execution will occur after the branch is pushed.
+The original contribution was prepared against upstream `664dc23ffcaef148b1a66e03d1cc627a7ca810a8`. This update merges upstream `295f850fdd7d999c3f415531da2e36be312510a6` into the published integration at `a7f5ff81f1247fbf2784caeda1031c0191cf6e6d`. All 11 upstream commits merge without conflicts, and there are no upstream schema changes. Source assets include all 15 seed photographs/plots; the public report remains byte-for-byte unchanged. The existing CI jobs cover both runtimes and will run after this update is pushed. See [UPSTREAM_UPDATE.md](UPSTREAM_UPDATE.md) for the adaptation and upgrade instructions.
 
 Docker, Windows execution, a real production database upgrade, SMTP and live Firebase were not exercised in this environment. Follow [IMPORTS.md](IMPORTS.md) and [DEPLOYMENT.md](DEPLOYMENT.md) for staged adoption.

@@ -10,10 +10,12 @@ About the EcoFlux project
 
 * Web design
 ** [[https://learning.oreilly.com/library/view/learning-web-design/9781098137670/?sso_link=yes&sso_link_from=mcgill-university][Learning Web Design]]
+Chapter 5, Marking Up Text, is really helpful presentation of the
+semantic parts of HTML5
 ** [[https://learning.oreilly.com/library/view/the-principles-of/9781098124717/][The Principles of Beatiful Web Design]]
 ** [[https://www.codementor.io/@chirilovadrian360/managing-the-ui-in-django-29fbj6oglf][Approaches to managing the UI]]
 ** [[https://www.geeksforgeeks.org/websites-apps/principles-of-web-design/][Principles of web design]]
-
+** [[https://www.csszengarden.com/][CSS Zengarden]]
 * Mermaid
 [[https://mermaid.js.org/][Mermaid site]]
 [[https://learning.oreilly.com/library/view/creating-software-with/9798888650219/f_0005.xhtml][Creating Software with Modern Diagramming Techniques]]
@@ -71,6 +73,12 @@ Download the HTML documentation [[https://media.djangoproject.com/docs/django-do
 * [[https://github.com/nvm-sh/nvm][NVM]]
 
 
+* Favicon
+Use [[https://pypi.org/project/faviconx/][faviconX]] to convert a single image file, eg. .png, into several
+sizes of favicons. It gives a long list of HTML tags to enable them.
+
+For this project, I used Project_resources/C-3_C-2.png as the source
+of all the favicons.
 
 * Configuration
 #+TODO: TODO(t) NEXTACTION(n) STARTED(s) WAITING(w) | DONE(d) CANCELED(c) DEFERRED(f)

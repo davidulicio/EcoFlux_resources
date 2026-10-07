@@ -2,7 +2,7 @@
 
 {% load crispy_forms_tags %}
 
-{% block page_heading %} - Document{% endblock %}
+{% block page_heading %}Document{% endblock %}
 
 {% block content %}
 <h2>Upload a PDF document</h2>
@@ -13,8 +13,6 @@
   data-form-name="Document Upload"
 >
     {% csrf_token %}
-    <input type="hidden" name="next" value="{{ request.GET.next|default:'' }}" />
-
     {% crispy form %}
 </form>
 

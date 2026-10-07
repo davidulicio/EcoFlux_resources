@@ -19,6 +19,7 @@ django-cors-headers = "*"
 
 [dev-packages]
 pylsp-rope = "*"
+faviconx = "*"
 
 [requires]
 python_version = "3.14"

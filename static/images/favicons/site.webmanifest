@@ -1,0 +1,21 @@
+{
+  "name": "Your Website",
+  "short_name": "Your App",
+  "description": "Your website description",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192\u00d7192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512\u00d7512",
+      "type": "image/png"
+    }
+  ]
+}

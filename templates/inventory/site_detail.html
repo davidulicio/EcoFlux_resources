@@ -1,14 +1,15 @@
 {% extends "inventory/layout_base.html" %}
 
-<head>
-  {% load crispy_forms_tags custom_filters %}
+
+  {% load crispy_forms_tags custom_filters static %}
 
   {% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/accordion.css' %}">
   {% endblock %}
 </head>
 
 <body>
-  {% block page_heading %} - {{action}} Site{% endblock %}
+  {% block page_heading %}{{action}} Site{% endblock %}
 
   {% block content %}
 
@@ -18,18 +19,16 @@
     {% csrf_token %}
     {% crispy form %}
 
-    <input type="hidden" name="next" value="{{ request.GET.next|default:'' }}">
-
-
-
+    {% if action == "Edit" %}
+    <!-- separate the related item accordions from the main data -->
+    {% include "inventory/include/related_items_border.html" %}
     <!-- accordion sections - outermost wrapper -->
-    <div class="accordion" id="mainAccordion">
-
-      {% if action == "Edit" %}
-
+    <div class="accordion accordion-horizontal"
+         id="mainAccordion"
+         style="--accordion-columns: {{ accordion_columns }};">
       <!-- DOI Records -->
       <div class="accordion-item mb-1">
-        {% include "inventory/include/accordion_header.html" with section_id="doi" section_title="DOI Records" button_text="Add DOI record" ajax_add_id="doi-add-btn" count=doi_records|length %}
+        {% include "inventory/include/accordion_header.html" with section_id="doi" section_title="DOI Records" ajax_add_id="doi-add-btn" count=doi_records|length %}
         <div id="doiCollapse" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
           <div class="accordion-body m-0 p-0">
 
@@ -97,14 +96,13 @@
         </div>
         </div>
       </div>
-
       <!-- Fieldnotes -->
       <div class="accordion-item mb-1">
-        {% include "inventory/include/accordion_header.html" with section_id="fieldnotes" section_title="Field Notes" button_text="Add a field note" button_url=fieldnote_create_url mt_3=True count=fieldnotes|length %}
+        {% include "inventory/include/accordion_header.html" with section_id="fieldnotes" section_title="Fieldnotes" button_url=fieldnote_create_url mt_3=True count=fieldnotes|length %}
         <div id="fieldnotesCollapse" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
           <div class="accordion-body m-0 p-0">
             {% if fieldnotes %}
-            <table class="table table-striped table-hover table-bordered m-0">
+            <table class="table table-sm table-striped table-hover table-bordered m-0">
               <thead>
                 <th>Date submitted</th>
                 <th>Summary</th>
@@ -128,19 +126,18 @@
               </tbody>
             </table>
             {% else %}
-            <div class="mt-2">No field notes for this site yet.</div>
+            <div class="mt-2">No fieldnotes for this site yet.</div>
             {% endif %}
           </div>
         </div>
       </div>
-
       <!-- Equipment -->
       <div class="accordion-item mb-1">
-        {% include "inventory/include/accordion_header.html" with section_id="equipment" section_title="Equipment" button_text="Add new equipment" button_url=equipment_create_url mt_3=True count=equipment|length %}
+        {% include "inventory/include/accordion_header.html" with section_id="equipment" section_title="Equipment" button_url=equipment_create_url mt_3=True count=equipment|length %}
         <div id="equipmentCollapse" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
           <div class="accordion-body m-0 p-0">
             {% if equipment %}
-            <table class="table table-striped table-hover table-bordered m-0">
+            <table class="table table-sm table-striped table-hover table-bordered m-0">
               <thead>
                 <th>Instrument</th>
                 <th>Notes</th>
@@ -166,16 +163,15 @@
       </div>
       <!-- Documents -->
       <div class="accordion-item mb-1">
-        {% include "inventory/include/accordion_header.html" with section_id="documents" section_title="Documents" button_text="Add a document" button_url=document_create_url mt_3=True count=documents|length %}
+        {% include "inventory/include/accordion_header.html" with section_id="documents" section_title="Documents" button_url=document_create_url mt_3=True count=documents|length %}
         <div id="documentsCollapse" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
             {% include "inventory/include/documents_accordion_body.html" with documents=documents document_edit_url="document_edit" %}
         </div>
       </div>
-
-      <!-- end of  if action == "Edit" -->
-      {% endif %}
     <!-- End of accordion sections -->
     </div>
+    <!-- end of  if action == "Edit" -->
+    {% endif %}
 
     {% include "inventory/include/messages.html" %}
     <!-- Save/Cancel/Delete buttons -->

@@ -2,6 +2,8 @@
 
 A unified Django application for Carbonique eddy covariance site operations, instrument records and scientific context. It brings together the workflows of **carbonique-field-log**, **EcoFlux_resources** and **carbonique_fieldnotes**.
 
+Updated against Hank's EcoFlux `main` at **`295f850`** on 2026-10-06. This update adds related-record tabs and the latest EcoFlux visual assets, with no new database migration. See [docs/UPSTREAM_UPDATE.md](docs/UPSTREAM_UPDATE.md) for changes and upgrade steps.
+
 ## Start locally
 
 Requires **Python 3.12 or newer** (tested with Python 3.12), a modern browser, and no Node build step. SQLite is included with Python. Windows runs the Django development server; Gunicorn is for Linux production servers.
@@ -66,9 +68,9 @@ An optional database-driven public view at **/reference/** publishes only select
 | Overview | Site network, pending tasks, visits and unresolved caveats |
 | Field work | Off-site planning; on-site visits; task completion; unplanned work; observations; checklists |
 | History | Searchable visits and all task activity, classifications, frozen report revisions, CSV exports and attachments |
-| Sites & instruments | Reference metadata, sensor-height diagram, deployment history and DOI records |
+| Sites & instruments | Tabs for reference metadata, sensor-height/deployment history, site equipment, visits, photos/documents and DOI records |
 | Data & processing | Draft/reviewed/resolved caveats, affected periods, evidence and immutable configuration versions |
-| Inventory | Serial numbers, models, current locations, service history and archived equipment |
+| Inventory | Serial numbers, models, current locations, service-history/files tabs and archived equipment |
 | Administration | Sites, accounts, roles, site access and maintenance checklists |
 
 The selected site is shared by all sections. The browser polls changes every 15 seconds while online, and uploads queued operations when connectivity returns.
